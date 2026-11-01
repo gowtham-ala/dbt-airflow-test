@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: dim_students
+    description: "Student dimension — one row per student with derived cohort and age attributes."
+    columns:
+      - name: student_id
+        description: "Primary key. 10-char student id."
+        data_tests:
+          - not_null
+          - unique
+      - name: student_email
+        description: "Lowercased institutional email."
+        data_tests:
+          - not_null
+      - name: admission_year
+        description: "Four-digit admission year derived from the id prefix."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024]
+      - name: cohort_label
+        description: "Human-readable cohort: Senior / Junior / Fresher."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Senior', 'Junior', 'Fresher', 'Unknown']
+      - name: age_years
+        description: "Age in whole years as of the current date."
+
+  - name: fct_enrollments
+    description: "Enrollment fact, grain = one row per student enrollment. Incremental (merge on student_id)."
+    columns:
+      - name: student_id
+        description: "FK to dim_students. Also the merge key."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_students')
+                field: student_id
+      - name: join_date
+        description: "Parsed join date (DATE)."
+        data_tests:
+          - not_null
+      - name: admission_year
+        description: "Admission year, must be one of the three valid cohorts."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024]

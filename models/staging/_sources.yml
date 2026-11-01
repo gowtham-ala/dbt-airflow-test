@@ -1,0 +1,33 @@
+version: 2
+
+sources:
+  - name: scrs
+    description: "Raw student records source system (SCRS). Lives in MAIN_SCH."
+    database: DBT_AIRFLOW_TEST
+    schema: MAIN_SCH
+    tables:
+      - name: scrs_users
+        description: "Raw student roster. Dates are stored as DD-MM-YYYY strings as delivered by the source."
+        columns:
+          - name: student_id
+            description: "10-char student id. Prefix encodes admission year: 22/23/24."
+            data_tests:
+              - not_null
+              - unique
+          - name: student_mail
+            description: "Institutional email, expected domain @kluniversity.in."
+            data_tests:
+              - not_null
+              - unique
+          - name: student_name
+            description: "Full name of the student."
+            data_tests:
+              - not_null
+          - name: student_dept
+            description: "Academic department code (CSE, ECE, MECH, EEE, IT)."
+            data_tests:
+              - not_null
+          - name: student_dob
+            description: "Date of birth, raw DD-MM-YYYY string."
+          - name: student_jd
+            description: "Join date, raw DD-MM-YYYY string."

@@ -1,0 +1,27 @@
+name: 'dbt_aflow'
+version: '1.0.0'
+config-version: 2
+
+# This profile name is a placeholder for the Cloud CLI; the actual
+# connection is resolved from dbt_cloud.yml + the dbt Cloud project.
+profile: 'default'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  dbt_aflow:
+    # Staging layer -> views (lightweight, always-fresh over source)
+    staging:
+      +materialized: view
+    # Marts layer -> dims as tables, facts as incremental (set per-model)
+    marts:
+      +materialized: table

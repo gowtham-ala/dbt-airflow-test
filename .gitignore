@@ -1,0 +1,11 @@
+# dbt
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
