@@ -9,8 +9,8 @@ models:
         data_tests:
           - not_null
           - unique
-          # custom generic test: enforces the id prefix rule
-          - valid_student_id_prefix
+          # custom generic test: 10 digits, all-numeric, prefix 22/23/24
+          - valid_student_id
       - name: student_email
         description: "Lowercased, trimmed institutional email."
         data_tests:
@@ -30,5 +30,20 @@ models:
           - accepted_values:
               arguments:
                 values: [2022, 2023, 2024]
+      - name: student_name
+        description: "Proper-cased student full name."
+        data_tests:
+          - not_null
+      - name: student_dept
+        description: "Academic department code."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CSE', 'ECE', 'MECH', 'EEE', 'IT']
       - name: email_domain
         description: "Domain portion of the email; expected kluniversity.in."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['kluniversity.in']
